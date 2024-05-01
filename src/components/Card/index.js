@@ -5,6 +5,7 @@ import AppContext from "../../context";
 
 function Card({
   id,
+  parentId,
   title,
   image,
   price,
@@ -18,15 +19,17 @@ function Card({
   const [isAdded, setIsAdded] = React.useState(false);
   const [isFavorite, setIsFavorite] = React.useState(favorited);
 
-  console.log( id, title,);
-  
+  const obj = { id, parentId: id, title, image, price };
+
+  console.log(id, title);
+
   const onClickPlus = () => {
-    onPlus({ id, title, image, price });
+    onPlus(obj);
     setIsAdded(!isAdded);
   };
 
   const onClickFavorite = () => {
-    onFavorite({ id, title, image, price });
+    onFavorite(obj);
     setIsFavorite(!isFavorite);
   };
 
@@ -50,25 +53,31 @@ function Card({
       ) : (
         <>
           <div className={styles.favorite}>
-            <img
-              onClick={onClickFavorite}
-              src={isFavorite ? "/img/liked.svg" : "/img/heart-unliked.svg"}
-              alt="unliked"
-            />
+            {onFavorite && (
+              <img
+                onClick={onClickFavorite}
+                src={isFavorite ? "/img/liked.svg" : "/img/heart-unliked.svg"}
+                alt="unliked"
+              />
+            )}
           </div>
-          <img width='100%' height={130} src={image} alt="Sneakers" />
+          <img width="100%" height={130} src={image} alt="Sneakers" />
           <h5>{title}</h5>
           <div className="d-flex justify-between align-center">
             <div className="d-flex flex-column">
               <span>Цена:</span>
               <b>{price} грн.</b>
             </div>
-            <img
-              alt="Plus"
-              onClick={onClickPlus}
-              className={styles.plus}
-              src={isItemAdded(id) ? "/img/btn-checked.svg" : "/img/btn-plus.svg"}
-            />
+            {onPlus && (
+              <img
+                alt="Plus"
+                onClick={onClickPlus}
+                className={styles.plus}
+                src={
+                  isItemAdded(id) ? "/img/btn-checked.svg" : "/img/btn-plus.svg"
+                }
+              />
+            )}
           </div>
         </>
       )}
